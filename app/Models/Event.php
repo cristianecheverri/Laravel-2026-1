@@ -18,6 +18,12 @@ class Event extends Model
         "event_speaker_name",
         "event_location_name",
         "event_meetup_url",
-        "event_is_virtual"
+        "event_is_virtual",
+        'fk_venue_event'
     ];
+
+    function venue()
+    {
+        return $this->belongsTo(Venue::class, 'fk_venue_event', 'id_venue');
+    }
 }

@@ -14,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::paginate();
+        return Event::with('venue')->paginate();
     }
 
     /**
@@ -31,7 +31,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return response()->json(['event' => $event]);
+        return response()->json(['event' => $event->load('venue')]);
     }
 
     /**
