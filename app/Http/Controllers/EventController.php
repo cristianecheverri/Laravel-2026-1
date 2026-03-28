@@ -51,4 +51,11 @@ class EventController extends Controller
         $event->delete();
         return response()->json(['mensaje' => 'Registro eliminado con éxito'], Response::HTTP_ACCEPTED);
     }
+
+    public function indexActiveEvents() {
+        return Event::with('venue')
+            ->where('event_status', true)
+            ->where('event_name', 'like', '%a%')
+            ->get();
+    }
 }
