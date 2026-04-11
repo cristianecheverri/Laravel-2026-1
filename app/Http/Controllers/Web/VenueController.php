@@ -40,7 +40,9 @@ class VenueController extends Controller
      */
     public function show(Venue $venue)
     {
-        //
+        return Inertia::render('Venues/Show', [
+            'venue' => $venue
+        ]);
     }
 
     /**
