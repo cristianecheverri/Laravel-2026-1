@@ -1,2 +1,2 @@
 [phases.setup]
-cmds = ["...", "php artisan storage:link"]
+cmds = ["php artisan storage:link"]
