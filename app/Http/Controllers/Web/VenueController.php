@@ -46,7 +46,7 @@ class VenueController extends Controller
             $validated['venue_image'] = $imagePath;
         }
 
-        Venue::create($validated);
+        Venue::create($validated); # Esta acción ejecuta el evento de un observer
 
         return redirect()->route('venues.index')
             ->with('message', 'Venue created successfully.');

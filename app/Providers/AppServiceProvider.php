@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Event;
+use App\Models\Venue;
+use App\Observers\EventObserver;
+use App\Observers\VenueObserver;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+        Event::observe(EventObserver::class);
+        Venue::observe(VenueObserver::class);
     }
 }
