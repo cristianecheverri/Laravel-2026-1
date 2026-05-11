@@ -1,10 +1,7 @@
 <script setup>
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 
 const form = useForm({
     venue_name: '',
@@ -22,104 +19,107 @@ const handleImageChange = (event) => {
     }
 };
 
-const submit = () => {
-    form.post(route('venues.store'), {
-        forceFormData: true,
-    });
-};
+const submit = () => form.post(route('venues.store'), { forceFormData: true });
 </script>
 
 <template>
-    <Head title="Create Venue"/>
+    <Head title="Create Venue" />
 
-    <AppLayout>
-        <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create Venue</h2>
-                <Link :href="route('venues.index')"
-                      class="px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-600">
+    <AppLayout title="Create Venue">
+        <div class="max-w-3xl mx-auto space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">Create Venue</h1>
+                    <p class="text-sm text-on-surface-variant mt-1">Register a new event venue</p>
+                </div>
+                <Link
+                    :href="route('venues.index')"
+                    class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-surface-container w-fit"
+                >
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
                     Back to Venues
                 </Link>
             </div>
-        </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="p-6">
-                        <form @submit.prevent="submit">
-                            <div class="mb-4">
-                                <InputLabel for="venue_name" value="Venue Name" class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="venue_name"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.venue_name"
-                                    required
-                                    autofocus
-                                />
-                                <InputError class="mt-2" :message="form.errors.venue_name"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="venue_address" value="Venue Address" class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="venue_address"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.venue_address"
-                                    required
-                                />
-                                <InputError class="mt-2" :message="form.errors.venue_address"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="venue_max_capacity" value="Maximum Capacity"
-                                            class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="venue_max_capacity"
-                                    type="number"
-                                    class="mt-1 block w-full"
-                                    v-model="form.venue_max_capacity"
-                                    required
-                                    min="1"
-                                />
-                                <InputError class="mt-2" :message="form.errors.venue_max_capacity"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="venue_image" value="Venue Image" class="dark:text-gray-300"/>
-                                <input
-                                    id="venue_image"
-                                    type="file"
-                                    class="mt-1 block w-full text-sm text-gray-500 dark:text-gray-400
-                                           file:mr-4 file:py-2 file:px-4
-                                           file:rounded-md file:border-0
-                                           file:text-sm file:font-semibold
-                                           file:bg-indigo-50 file:text-indigo-700
-                                           dark:file:bg-indigo-900 dark:file:text-indigo-300
-                                           hover:file:bg-indigo-100 dark:hover:file:bg-indigo-800"
-                                    @change="handleImageChange"
-                                    accept="image/*"
-                                />
-                                <InputError class="mt-2" :message="form.errors.venue_image"/>
-                            </div>
-
-                            <div v-if="form.imagePreview" class="mb-4">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Preview:</p>
-                                <img :src="form.imagePreview" alt="Venue Image Preview" class="w-48 h-48 object-cover rounded-md">
-                            </div>
-
-                            <div class="flex items-center justify-end mt-4">
-                                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }"
-                                               :disabled="form.processing">
-                                    Create Venue
-                                </PrimaryButton>
-                            </div>
-                        </form>
+            <section class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 sm:p-8">
+                <form @submit.prevent="submit" class="space-y-6">
+                    <div>
+                        <label for="venue_name" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Venue Name</label>
+                        <input
+                            id="venue_name"
+                            type="text"
+                            v-model="form.venue_name"
+                            required
+                            autofocus
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                        <InputError class="mt-2" :message="form.errors.venue_name" />
                     </div>
-                </div>
-            </div>
+
+                    <div>
+                        <label for="venue_address" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Venue Address</label>
+                        <input
+                            id="venue_address"
+                            type="text"
+                            v-model="form.venue_address"
+                            required
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                        <InputError class="mt-2" :message="form.errors.venue_address" />
+                    </div>
+
+                    <div>
+                        <label for="venue_max_capacity" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Maximum Capacity</label>
+                        <input
+                            id="venue_max_capacity"
+                            type="number"
+                            min="1"
+                            v-model="form.venue_max_capacity"
+                            required
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                        <InputError class="mt-2" :message="form.errors.venue_max_capacity" />
+                    </div>
+
+                    <div>
+                        <label for="venue_image" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Venue Image</label>
+                        <input
+                            id="venue_image"
+                            type="file"
+                            accept="image/*"
+                            @change="handleImageChange"
+                            class="w-full text-sm text-on-surface-variant
+                                   file:mr-4 file:py-2 file:px-4
+                                   file:rounded-xl file:border-0
+                                   file:text-sm file:font-bold
+                                   file:bg-primary file:text-on-primary
+                                   hover:file:bg-primary-container cursor-pointer"
+                        >
+                        <InputError class="mt-2" :message="form.errors.venue_image" />
+                    </div>
+
+                    <div v-if="form.imagePreview">
+                        <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Preview</p>
+                        <img :src="form.imagePreview" alt="Venue preview" class="w-full max-w-xs aspect-video object-cover rounded-xl">
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-outline-variant/30">
+                        <Link
+                            :href="route('venues.index')"
+                            class="px-4 py-2 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container"
+                        >Cancel</Link>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            :class="{ 'opacity-50': form.processing }"
+                            class="bg-primary text-on-primary px-5 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary-container transition-colors"
+                        >
+                            <span class="material-symbols-outlined text-base">add</span>
+                            Create Venue
+                        </button>
+                    </div>
+                </form>
+            </section>
         </div>
     </AppLayout>
 </template>

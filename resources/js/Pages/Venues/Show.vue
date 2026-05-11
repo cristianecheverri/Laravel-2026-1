@@ -1,5 +1,5 @@
 <script setup>
-import {Head, Link} from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
@@ -8,55 +8,57 @@ const props = defineProps({
 </script>
 
 <template>
-    <Head title="Venue Details"/>
+    <Head title="Venue Details" />
 
-    <AppLayout>
-        <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    Venue Details
-                </h2>
-                <Link :href="route('venues.index')"
-                      class="px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-600">
-                    Back to Venues
-                </Link>
-            </div>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="p-6">
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Venue Information</h3>
-
-                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">ID</p>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ venue.id_venue }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</p>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ venue.venue_name }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Address</p>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ venue.venue_address }}</p>
-                                </div>
-
-                                <div>
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Maximum Capacity</p>
-                                    <p class="mt-1 text-sm text-gray-900 dark:text-white">{{
-                                            venue.venue_max_capacity
-                                        }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <AppLayout title="Venue Details">
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">{{ venue.venue_name }}</h1>
+                    <p class="text-sm text-on-surface-variant mt-1 font-mono">#{{ venue.id_venue }}</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <Link
+                        :href="route('venues.index')"
+                        class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-surface-container"
+                    >
+                        <span class="material-symbols-outlined text-base">arrow_back</span>
+                        Back
+                    </Link>
+                    <Link
+                        :href="route('venues.edit', venue.id_venue)"
+                        class="bg-primary text-on-primary px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary-container transition-colors"
+                    >
+                        <span class="material-symbols-outlined text-base">edit</span>
+                        Edit
+                    </Link>
                 </div>
             </div>
+
+            <section class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden">
+                <div v-if="venue.venue_image" class="aspect-video w-full bg-surface-container">
+                    <img :src="'/storage/' + venue.venue_image" :alt="venue.venue_name" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6 sm:p-8">
+                    <h2 class="text-lg font-extrabold text-primary font-headline mb-6">Venue Information</h2>
+                    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <dt class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Address</dt>
+                            <dd class="mt-1 text-sm text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base text-primary">location_on</span>
+                                {{ venue.venue_address }}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Maximum Capacity</dt>
+                            <dd class="mt-1 text-sm text-on-surface flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base text-primary">groups</span>
+                                {{ Number(venue.venue_max_capacity).toLocaleString() }}
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </section>
         </div>
     </AppLayout>
 </template>

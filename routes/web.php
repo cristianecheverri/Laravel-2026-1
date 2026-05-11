@@ -22,10 +22,13 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         $events = \App\Models\Event::with('venue')
-            ->where('event_status', true)
             ->orderBy('event_date', 'asc')
             ->get();
-        return Inertia::render('Dashboard', ['events' => $events]);
+        $venues = \App\Models\Venue::all();
+        return Inertia::render('Dashboard', [
+            'events' => $events,
+            'venues' => $venues,
+        ]);
     })->name('dashboard');
 
     Route::resource('venues', VenueController::class);

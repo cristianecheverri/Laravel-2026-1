@@ -1,11 +1,8 @@
 <script setup>
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import { onMounted } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { onMounted } from 'vue';
 
 const props = defineProps({
     event: Object,
@@ -21,124 +18,135 @@ const form = useForm({
     fk_venue_event: props.event.fk_venue_event,
 });
 
-const submit = () => {
-    form.put(route('events.update', props.event.id_event));
-};
+const submit = () => form.put(route('events.update', props.event.id_event));
 
 onMounted(() => {
-    // Formatear la fecha para el input datetime-local
     if (props.event.event_date) {
-        const date = new Date(props.event.event_date);
-        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-        form.event_date = date.toISOString().slice(0, 16);
+        const d = new Date(props.event.event_date);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        form.event_date = d.toISOString().slice(0, 16);
     }
 });
 </script>
 
 <template>
-    <Head title="Edit Event"/>
+    <Head title="Edit Event" />
 
-    <AppLayout>
-        <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Edit Event</h2>
-                <Link :href="route('events.index')"
-                      class="px-4 py-2 bg-gray-800 dark:bg-gray-700 text-white rounded-md hover:bg-gray-700 dark:hover:bg-gray-600">
+    <AppLayout title="Edit Event">
+        <div class="max-w-3xl mx-auto space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-primary font-headline">Edit Event</h1>
+                    <p class="text-sm text-on-surface-variant mt-1">Update event details</p>
+                </div>
+                <Link
+                    :href="route('events.index')"
+                    class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-surface-container w-fit"
+                >
+                    <span class="material-symbols-outlined text-base">arrow_back</span>
                     Back to Events
                 </Link>
             </div>
-        </template>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="p-6">
-                        <form @submit.prevent="submit">
-                            <div class="mb-4">
-                                <InputLabel for="event_name" value="Event Name" class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="event_name"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.event_name"
-                                    required
-                                    autofocus
-                                />
-                                <InputError class="mt-2" :message="form.errors.event_name"/>
-                            </div>
 
-                            <div class="mb-4">
-                                <InputLabel for="event_date" value="Event Date" class="dark:text-gray-300"/>
-                                <input
-                                    id="event_date"
-                                    type="datetime-local"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                    v-model="form.event_date"
-                                    required
-                                />
-                                <InputError class="mt-2" :message="form.errors.event_date"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="event_max_capacity" value="Max Capacity" class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="event_max_capacity"
-                                    type="number"
-                                    class="mt-1 block w-full"
-                                    v-model="form.event_max_capacity"
-                                    required
-                                    min="1"
-                                />
-                                <InputError class="mt-2" :message="form.errors.event_max_capacity"/>
-                            </div>
-
-                            <div class="mb-4 flex items-center">
-                                <input
-                                    id="event_is_virtual"
-                                    type="checkbox"
-                                    class="rounded border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600"
-                                    v-model="form.event_is_virtual"
-                                />
-                                <InputLabel for="event_is_virtual" value="Is Virtual Event?" class="ml-2 dark:text-gray-300"/>
-                                <InputError class="mt-2" :message="form.errors.event_is_virtual"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="event_speaker_name" value="Speaker Name" class="dark:text-gray-300"/>
-                                <TextInput
-                                    id="event_speaker_name"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.event_speaker_name"
-                                    required
-                                />
-                                <InputError class="mt-2" :message="form.errors.event_speaker_name"/>
-                            </div>
-
-                            <div class="mb-4">
-                                <InputLabel for="fk_venue_event" value="Venue" class="dark:text-gray-300"/>
-                                <select
-                                    id="fk_venue_event"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                    v-model="form.fk_venue_event"
-                                >
-                                    <option value="">Select a Venue</option>
-                                    <option v-for="venue in venues" :key="venue.id_venue" :value="venue.id_venue">
-                                        {{ venue.venue_name }} (Capacity: {{ venue.venue_max_capacity }})
-                                    </option>
-                                </select>
-                                <InputError class="mt-2" :message="form.errors.fk_venue_event"/>
-                            </div>
-
-                            <div class="flex items-center justify-end mt-4">
-                                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }"
-                                               :disabled="form.processing">
-                                    Update Event
-                                </PrimaryButton>
-                            </div>
-                        </form>
+            <section class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 sm:p-8">
+                <form @submit.prevent="submit" class="space-y-6">
+                    <div>
+                        <label for="event_name" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Event Name</label>
+                        <input
+                            id="event_name"
+                            type="text"
+                            v-model="form.event_name"
+                            required
+                            autofocus
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                        <InputError class="mt-2" :message="form.errors.event_name" />
                     </div>
-                </div>
-            </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label for="event_date" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Event Date</label>
+                            <input
+                                id="event_date"
+                                type="datetime-local"
+                                v-model="form.event_date"
+                                required
+                                class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                            >
+                            <InputError class="mt-2" :message="form.errors.event_date" />
+                        </div>
+                        <div>
+                            <label for="event_max_capacity" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Max Capacity</label>
+                            <input
+                                id="event_max_capacity"
+                                type="number"
+                                min="1"
+                                v-model="form.event_max_capacity"
+                                required
+                                class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                            >
+                            <InputError class="mt-2" :message="form.errors.event_max_capacity" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="event_speaker_name" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Speaker Name</label>
+                        <input
+                            id="event_speaker_name"
+                            type="text"
+                            v-model="form.event_speaker_name"
+                            required
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                        <InputError class="mt-2" :message="form.errors.event_speaker_name" />
+                    </div>
+
+                    <div>
+                        <label for="fk_venue_event" class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Venue</label>
+                        <select
+                            id="fk_venue_event"
+                            v-model="form.fk_venue_event"
+                            class="w-full bg-surface-container-low border-outline-variant text-on-surface rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary"
+                        >
+                            <option value="">Select a venue</option>
+                            <option v-for="venue in venues" :key="venue.id_venue" :value="venue.id_venue">
+                                {{ venue.venue_name }} (Capacity: {{ venue.venue_max_capacity }})
+                            </option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.fk_venue_event" />
+                    </div>
+
+                    <label class="flex items-center gap-3 p-4 rounded-xl bg-surface-container-low cursor-pointer">
+                        <input
+                            id="event_is_virtual"
+                            type="checkbox"
+                            v-model="form.event_is_virtual"
+                            class="rounded border-outline-variant text-primary focus:ring-primary/30"
+                        >
+                        <div>
+                            <span class="text-sm font-bold text-on-surface">Virtual event</span>
+                            <p class="text-xs text-on-surface-variant">Held online via meet-up URL.</p>
+                        </div>
+                    </label>
+                    <InputError :message="form.errors.event_is_virtual" />
+
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-outline-variant/30">
+                        <Link
+                            :href="route('events.index')"
+                            class="px-4 py-2 rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container"
+                        >Cancel</Link>
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            :class="{ 'opacity-50': form.processing }"
+                            class="bg-primary text-on-primary px-5 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary-container transition-colors"
+                        >
+                            <span class="material-symbols-outlined text-base">save</span>
+                            Update Event
+                        </button>
+                    </div>
+                </form>
+            </section>
         </div>
     </AppLayout>
 </template>

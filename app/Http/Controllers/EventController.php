@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -15,6 +17,15 @@ class EventController extends Controller
     public function index()
     {
         return Event::with('venue')->paginate();
+//        return DB::table('events')
+//            ->leftJoin('venues', function (JoinClause $join) {
+//                $join->on('events.fk_venue_event', '=', 'venues.id_venue')
+//                    ->whereNull('venues.deleted_at');
+//            })
+//            ->get([
+//                'event_name',
+//                "venue_name"
+//            ]);
     }
 
     /**
